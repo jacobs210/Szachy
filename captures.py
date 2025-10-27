@@ -4,24 +4,15 @@ def pawn(piece):
     tmoves = []
     moves = []
     square = piece.square
-    if piece.Moved:
-        if piece.color == "White":
-            tmoves.append(square.up())
-        else:
-            tmoves.append(square.down())
+    if piece.color == "White":
+        tmoves.append(sqr(square.up()).right())
+        tmoves.append(sqr(square.up()).left())
     else:
-        if piece.color == "White":
-            tmoves.append(square.up())
-            tmoves.append(square.up(2))
-        else:
-            tmoves.append(square.down())
-            tmoves.append(square.down(2))
+        tmoves.append(sqr(square.down()).right())
+        tmoves.append(sqr(square.down()).left())
     for x in tmoves:
         if x in sboard:
-            if board[sboard.index(x)].occupant == "Null":
                 moves.append(board[sboard.index(x)])
-            else:
-                break
     return moves
 def knight(piece):
     tmoves = []
@@ -36,7 +27,7 @@ def knight(piece):
     tmoves.append(sqr(square.down()).right(2))
     tmoves.append(sqr(square.down()).left(2))
     for x in tmoves:
-        if x in sboard and board[sboard.index(x)].occupant == "Null":
+        if x in sboard:
             moves.append(board[sboard.index(x)])
     return moves
 def bishop(piece):
@@ -56,24 +47,28 @@ def bishop(piece):
             if board[sboard.index(x)].occupant == "Null":
                 moves.append(board[sboard.index(x)])
             else:
+                moves.append(board[sboard.index(x)])
                 break
     for x in ulmoves:
         if x in sboard:
             if board[sboard.index(x)].occupant == "Null":
                 moves.append(board[sboard.index(x)])
             else:
+                moves.append(board[sboard.index(x)])
                 break
     for x in drmoves:
         if x in sboard:
             if board[sboard.index(x)].occupant == "Null":
                 moves.append(board[sboard.index(x)])
             else:
+                moves.append(board[sboard.index(x)])
                 break
     for x in dlmoves:
         if x in sboard:
             if board[sboard.index(x)].occupant == "Null":
                 moves.append(board[sboard.index(x)])
             else:
+                moves.append(board[sboard.index(x)])
                 break
     return moves
 def rook(piece):
@@ -93,24 +88,28 @@ def rook(piece):
             if board[sboard.index(x)].occupant == "Null":
                 moves.append(board[sboard.index(x)])
             else:
+                moves.append(board[sboard.index(x)])
                 break
     for x in dmoves:
         if x in sboard:
             if board[sboard.index(x)].occupant == "Null":
                 moves.append(board[sboard.index(x)])
             else:
+                moves.append(board[sboard.index(x)])
                 break
     for x in rmoves:
         if x in sboard:
             if board[sboard.index(x)].occupant == "Null":
                 moves.append(board[sboard.index(x)])
             else:
+                moves.append(board[sboard.index(x)])
                 break
     for x in lmoves:
         if x in sboard:
             if board[sboard.index(x)].occupant == "Null":
                 moves.append(board[sboard.index(x)])
             else:
+                moves.append(board[sboard.index(x)])
                 break
     return moves
 def queen(piece):
@@ -128,10 +127,11 @@ def king(piece):
     tmoves.append(sqr(square.down()).right())
     tmoves.append(sqr(square.down()).left())
     for x in tmoves:
-        if x in sboard and board[sboard.index(x)].occupant == "Null" and piece.color not in square.checked:
+        if x in sboard and piece.color not in square.checked:
             moves.append(board[sboard.index(x)])
     return moves
-def move(piece):
+
+def capture(piece):
     match piece.typ:
         case "Pawn":
             return pawn(piece)
