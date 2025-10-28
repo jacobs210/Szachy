@@ -8,13 +8,11 @@ def checking():
     white = set()
     black = set()
     for x in whites:
-        print(x)
-        print(x, list(map(str, capture(x))))
-        #white.update(list(map(str, capture(x))))
+        white.update(list(map(str, capture(x))))
     for x in blacks:
-        black.update(capture(x))
+        black.update(list(map(str, capture(x))))
     for x in board:
-        if x in white:
+        if str(x) in white:
             x.checked.append("White")
-        if x in black:
+        if str(x) in black:
             x.checked.append("Black")

@@ -4,7 +4,7 @@ whites = []
 blacks = []
 for x in range(1, boardMax["x"] + 1):
     whites.append(Piece(0, "Pawn", Square(x, 2)))
-    blacks.append(Piece(1, "Pawn", Square(x, 2)))
+    blacks.append(Piece(1, "Pawn", Square(x, 7)))
 whites.append(Piece(0, "Rook", Square(1, 1)))
 whites.append(Piece(0, "Rook", Square(8, 1)))
 whites.append(Piece(0, "Knight", Square(2, 1)))

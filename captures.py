@@ -113,7 +113,12 @@ def rook(piece):
                 break
     return moves
 def queen(piece):
-    return bishop(piece).extend(rook(piece))
+    moves = []
+    for x in bishop(piece):
+        moves.append(x)
+    for x in rook(piece):
+        moves.append(x)
+    return moves
 def king(piece):
     tmoves = []
     moves = []
