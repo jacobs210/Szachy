@@ -5,7 +5,7 @@ class Square:
         self.occupant = "Null"
         self.checked = []
     def __key(self):
-        return (self.x, self.y, self.occupant, self.checked)
+        return (self.x, self.y)
 
     def __hash__(self):
         return hash(self.__key())
