@@ -4,8 +4,9 @@ class Square:
         self.y = y
         self.occupant = "Null"
         self.checked = []
+        self.clicked = False
     def __key(self):
-        return (self.x, self.y)
+        return self.x, self.y
 
     def __hash__(self):
         return hash(self.__key())
