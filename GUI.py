@@ -1,6 +1,7 @@
 from tkinter import *
 from  board_setup import board, sboard
 from main import *
+#import ImageTk
 def show():
     for i, y in enumerate(gpieces.values()):
         xc = 79 * pieces[i].square.x - 79
@@ -20,8 +21,8 @@ def tmove(square):
     elif lclick == "":
         square.clicked = True
     else:
+        print(lclick.occupant)
         try:
-            print(lclick.occupant)
             lclick.occupant.to(square)
         except Exception:
             print("aa")
@@ -29,11 +30,12 @@ def tmove(square):
         square.clicked = False
         lclick.clicked = False
         show()
-        print(list(map(str, pieces)))
+    print(list(map(str, pieces)))
 
 def getsquare(eventorigin):
     xc = eventorigin.x
     yc = eventorigin.y
+    print(xc, yc)
     xlist = ["A", "B", "C", "D", "E", "F", "G", "H"]
     ylist = ["8", "7", "6", "5", "4", "3", "2", "1"]
     if 661 > xc  > 30 and 661 > yc > 30:
@@ -42,7 +44,11 @@ def getsquare(eventorigin):
         xc //= 79
         yc //= 79
         square = board[sboard.index(xlist[xc] + ylist[yc])]
+        print(square)
         tmove(square)
+def getpiece(i):
+    print(i)
+
 root = Tk()
 root.title("Szachy")
 root.geometry("691x691")
@@ -87,6 +93,7 @@ gpieces["bqueen"] = Label(root, image=bqueen)
 gpieces["bking"] = Label(root, image=bking)
 board_label = Label(root, image=boardp)
 board_label.place(x = 0, y = 0)
-show()
-root.bind("<Button 1>", getsquare)
+for i, x in enumerate(gpieces.values()):
+    x.bind(f"<Button{i + 2}>", getpiece(i + 2))
+board_label.bind("<Button 1>", getsquare)
 root.mainloop()
