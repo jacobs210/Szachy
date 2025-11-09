@@ -1,15 +1,7 @@
 from tkinter import *
 from  board_setup import board, sboard
-from main import *
-def show():
-    for i, y in enumerate(gpieces.values()):
-        xc = 79 * pieces[i].square.x - 79
-        yc = 79 * pieces[i].square.y
-        xp, yp = 32, 664
-        xp += xc
-        yp -= yc
-        y.place(x = xp, y = yp)
-        y.lift()
+from  piece_setup import pieces
+
 def tmove(square):
     lclick = ""
     for x in board:
@@ -21,15 +13,29 @@ def tmove(square):
         square.clicked = True
     else:
         try:
-            print(lclick.occupant)
+            piece = lclick.occupant
+            x, y = tocor(str(square))
             lclick.occupant.to(square)
+            canvas.moveto(opieces.get(piece), x, y)
         except Exception:
-            print("aa")
             pass
         square.clicked = False
         lclick.clicked = False
-        show()
         print(list(map(str, pieces)))
+
+def tocor(square):
+    x = square[0]
+    y = square[1]
+    xlist = ["A", "B", "C", "D", "E", "F", "G", "H"]
+    ylist = ["8", "7", "6", "5", "4", "3", "2", "1"]
+    x = xlist.index(x)
+    y = ylist.index(y)
+    x *= 79
+    y *= 79
+    x += 32
+    y += 32
+    return x, y
+
 
 def getsquare(eventorigin):
     xc = eventorigin.x
@@ -62,31 +68,44 @@ bqueen = PhotoImage(file="img/bqueen.png")
 wking = PhotoImage(file="img/wking.png")
 bking = PhotoImage(file="img/bking.png")
 
-gpieces = dict()
+canvas = Canvas(root, width=691, height=691, bg='white')
+canvas.pack(anchor="center", expand=True)
+canvas.create_image((0, 0),
+    image=boardp,
+    anchor='nw'
+)
+lpieces = list()
 for x in range(1,9):
-    gpieces[f"wpawn{x}"] = Label(root, image=wpawn)
-gpieces["wrook1"] = Label(root, image=wrook)
-gpieces["wrook2"] = Label(root, image=wrook)
-gpieces["wknight1"] = Label(root, image=wknight)
-gpieces["wknight2"] = Label(root, image=wknight)
-gpieces["wknight2"] = Label(root, image=wknight)
-gpieces["wbishop1"] = Label(root, image=wbishop)
-gpieces["wbishop2"] = Label(root, image=wbishop)
-gpieces["wqueen"] = Label(root, image=wqueen)
-gpieces["wking"] = Label(root, image=wking)
+    lpieces.append(canvas.create_image(
+       tocor(f"{chr(x+64)}2"),
+        image=wpawn,
+        anchor = 'nw'
+    ))
+lpieces.append(canvas.create_image(tocor("A1"),image=wrook,anchor = 'nw'))
+lpieces.append(canvas.create_image(tocor("H1"),image=wrook,anchor = 'nw'))
+lpieces.append(canvas.create_image(tocor("B1"),image=wknight,anchor = 'nw'))
+lpieces.append(canvas.create_image(tocor("G1"),image=wknight,anchor = 'nw'))
+lpieces.append(canvas.create_image(tocor("C1"),image=wbishop,anchor = 'nw'))
+lpieces.append(canvas.create_image(tocor("F1"),image=wbishop,anchor = 'nw'))
+lpieces.append(canvas.create_image(tocor("D1"),image=wqueen,anchor = 'nw'))
+lpieces.append(canvas.create_image(tocor("E1"),image=wking,anchor = 'nw'))
 for x in range(1,9):
-    gpieces[f"bpawn{x}"] = Label(root, image=bpawn)
-gpieces["brook1"] = Label(root, image=brook)
-gpieces["brook2"] = Label(root, image=brook)
-gpieces["bknight1"] = Label(root, image=bknight)
-gpieces["bknight2"] = Label(root, image=bknight)
-gpieces["bknight2"] = Label(root, image=bknight)
-gpieces["bbishop1"] = Label(root, image=bbishop)
-gpieces["bbishop2"] = Label(root, image=bbishop)
-gpieces["bqueen"] = Label(root, image=bqueen)
-gpieces["bking"] = Label(root, image=bking)
-board_label = Label(root, image=boardp)
-board_label.place(x = 0, y = 0)
-show()
-root.bind("<Button 1>", getsquare)
+    lpieces.append(canvas.create_image(
+       tocor(f"{chr(x+64)}7"),
+        image=bpawn,
+        anchor = 'nw'
+    ))
+lpieces.append(canvas.create_image(tocor("A8"),image=brook,anchor = 'nw'))
+lpieces.append(canvas.create_image(tocor("H8"),image=brook,anchor = 'nw'))
+lpieces.append(canvas.create_image(tocor("B8"),image=bknight,anchor = 'nw'))
+lpieces.append(canvas.create_image(tocor("G8"),image=bknight,anchor = 'nw'))
+lpieces.append(canvas.create_image(tocor("C8"),image=bbishop,anchor = 'nw'))
+lpieces.append(canvas.create_image(tocor("F8"),image=bbishop,anchor = 'nw'))
+lpieces.append(canvas.create_image(tocor("D8"),image=bqueen,anchor = 'nw'))
+lpieces.append(canvas.create_image(tocor("E8"),image=bking,anchor = 'nw'))
+opieces = dict()
+for i, x in enumerate(pieces):
+    opieces[x] = lpieces[i]
+canvas.bind("<Button 1>", getsquare)
+
 root.mainloop()
