@@ -119,6 +119,7 @@ def queen(piece):
 def king(piece):
     tmoves = []
     moves = []
+    nColor = "Black" if piece.color == "White" else "White"
     square = piece.square
     tmoves.append(square.up())
     tmoves.append(square.down())
@@ -129,7 +130,7 @@ def king(piece):
     tmoves.append(sqr(square.down()).right())
     tmoves.append(sqr(square.down()).left())
     for x in tmoves:
-        if x in sboard and piece.color not in board[sboard.index(x)].checked:
+        if x in sboard and nColor not in board[sboard.index(x)].checked:
             moves.append(board[sboard.index(x)])
     return moves
 

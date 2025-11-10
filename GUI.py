@@ -18,8 +18,11 @@ def tmove(square):
         try:
             piece = lclick.occupant
             x, y = tocor(str(square))
-            lclick.occupant.to(square)
+            what, rook = lclick.occupant.to(square)
             canvas.moveto(opieces.get(piece), x, y)
+            if what == "Castling":
+                x, y = tocor(str(rook.square))
+                canvas.moveto(opieces.get(rook), x, y)
             for i, x in enumerate(pieces):
                 if x == "Null":
                     canvas.delete(lpieces[i])
@@ -28,7 +31,6 @@ def tmove(square):
         square.clicked = False
         lclick.clicked = False
         canvas.delete(clickID)
-
 
 def tocor(square):
     x = square[0]

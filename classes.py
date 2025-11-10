@@ -25,7 +25,6 @@ class Square:
         return f"{chr(self.x + 64 + val)}{self.y }"
     def left(self, val = 1):
         return f"{chr(self.x + 64 - val)}{self.y}"
-
 class Piece:
     def __init__(self, color, typ, square):
         from board_setup import board, sboard
@@ -41,17 +40,24 @@ class Piece:
         return f"{self.color} {self.typ} on {self.square}"
     def to(self, square):
         from func import checking
-        from board_setup import board
+        from board_setup import board, sboard
         from moves import move
         from captures import capture
         from piece_setup import pieces
         checking()
         square = board[board.index(square)]
-        if square.occupant == "Null" and square in move(self):
+        cast = dict()
+        if self.typ == "King":
+            moves, cast = move(self)
+        else:
+            moves = move(self)
+
+        if square.occupant == "Null" and square in moves:
             square.occupant = self
             self.square.occupant = "Null"
             self.square = square
             self.Moved = True
+            return "Moving", None
         elif square.occupant != "Null" and square.occupant.color != self.color and square in capture(self):
             pieces[pieces.index(square.occupant)] = "Null"
             square.occupant.square = "Null"
@@ -59,5 +65,24 @@ class Piece:
             square.occupant = self
             self.square = square
             self.Moved = True
+            return "Capturing", None
+        elif square in cast.keys():
+            rook = cast[square]
+            square.occupant = self
+            self.square.occupant = "Null"
+            self.square = square
+            self.Moved = True
+            if str(rook.square)[0] == "A":
+                board[sboard.index(square.right())].occupant = rook
+            else:
+                board[sboard.index(square.left())].occupant = rook
+            rook.square.occupant = "Null"
+            if str(rook.square)[0] == "A":
+                rook.square = board[sboard.index(square.right())]
+            else:
+                rook.square = board[sboard.index(square.left())]
+            rook.Moved = True
+            return "Castling", rook
+
         else:
             raise Exception

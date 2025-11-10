@@ -1,5 +1,6 @@
 from board_setup import board, sboard, boardMax
 from func import sqr
+from piece_setup import pieces
 def pawn(piece):
     tmoves = []
     moves = []
@@ -120,6 +121,7 @@ def queen(piece):
 def king(piece):
     tmoves = []
     moves = []
+    cast = dict()
     nColor = "Black" if piece.color == "White" else "White"
     square = piece.square
     tmoves.append(square.up())
@@ -133,8 +135,15 @@ def king(piece):
     for x in tmoves:
         if x in sboard and board[sboard.index(x)].occupant == "Null" and nColor not in board[sboard.index(x)].checked:
             moves.append(board[sboard.index(x)])
-    print(list(map(str, moves)))
-    return moves
+    if piece.color == "White":
+        x, y = 8, 9
+    else:
+        x, y = 24, 25
+    if not pieces[x].Moved and not piece.Moved and nColor not in board[sboard.index(square.left())].checked and nColor not in board[sboard.index(square.left(2))].checked and nColor not in board[board.index(square)].checked and board[sboard.index(square.left())].occupant == "Null" and board[sboard.index(square.left(2))].occupant == "Null" and board[sboard.index(square.left(3))].occupant == "Null":
+        cast[board[sboard.index(square.left(2))]] = pieces[x]
+    if not pieces[y].Moved and not piece.Moved and nColor not in board[sboard.index(square.right())].checked and nColor not in board[sboard.index(square.right(2))].checked and nColor not in board[board.index(square)].checked and board[sboard.index(square.right())].occupant == "Null" and board[sboard.index(square.right(2))].occupant == "Null":
+        cast[board[sboard.index(square.right(2))]] = pieces[y]
+    return moves, cast
 def move(piece):
     match piece.typ:
         case "Pawn":
