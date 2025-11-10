@@ -114,10 +114,13 @@ def rook(piece):
                 break
     return moves
 def queen(piece):
-    return bishop(piece).extend(rook(piece))
+    moves = bishop(piece)
+    moves.extend(rook(piece))
+    return moves
 def king(piece):
     tmoves = []
     moves = []
+    nColor = "Black" if piece.color == "White" else "White"
     square = piece.square
     tmoves.append(square.up())
     tmoves.append(square.down())
@@ -128,8 +131,9 @@ def king(piece):
     tmoves.append(sqr(square.down()).right())
     tmoves.append(sqr(square.down()).left())
     for x in tmoves:
-        if x in sboard and board[sboard.index(x)].occupant == "Null" and piece.color not in square.checked:
+        if x in sboard and board[sboard.index(x)].occupant == "Null" and nColor not in board[sboard.index(x)].checked:
             moves.append(board[sboard.index(x)])
+    print(list(map(str, moves)))
     return moves
 def move(piece):
     match piece.typ:

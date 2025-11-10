@@ -48,16 +48,16 @@ class Piece:
         checking()
         square = board[board.index(square)]
         if square.occupant == "Null" and square in move(self):
-            self.square.occupant = "Null"
             square.occupant = self
+            self.square.occupant = "Null"
             self.square = square
             self.Moved = True
         elif square.occupant != "Null" and square.occupant.color != self.color and square in capture(self):
+            pieces[pieces.index(square.occupant)] = "Null"
+            square.occupant.square = "Null"
             self.square.occupant = "Null"
             square.occupant = self
             self.square = square
-            square.occupant.square = "Null"
-            pieces[pieces.index(square.occupant)] = "Null"
             self.Moved = True
         else:
             raise Exception

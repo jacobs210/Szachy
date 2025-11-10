@@ -113,11 +113,8 @@ def rook(piece):
                 break
     return moves
 def queen(piece):
-    moves = []
-    for x in bishop(piece):
-        moves.append(x)
-    for x in rook(piece):
-        moves.append(x)
+    moves = bishop(piece)
+    moves.extend(rook(piece))
     return moves
 def king(piece):
     tmoves = []
@@ -132,7 +129,7 @@ def king(piece):
     tmoves.append(sqr(square.down()).right())
     tmoves.append(sqr(square.down()).left())
     for x in tmoves:
-        if x in sboard and piece.color not in square.checked:
+        if x in sboard and piece.color not in board[sboard.index(x)].checked:
             moves.append(board[sboard.index(x)])
     return moves
 

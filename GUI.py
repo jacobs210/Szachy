@@ -3,25 +3,32 @@ from  board_setup import board, sboard
 from  piece_setup import pieces
 
 def tmove(square):
+    global clickID
     lclick = ""
     for x in board:
         if x.clicked and x != square:
             lclick = x
     if square.clicked:
         square.clicked = False
+        canvas.delete(clickID)
     elif lclick == "":
         square.clicked = True
+        clickID = canvas.create_image(tocor(str(square)), image=clicked, anchor='nw')
     else:
         try:
             piece = lclick.occupant
             x, y = tocor(str(square))
             lclick.occupant.to(square)
             canvas.moveto(opieces.get(piece), x, y)
+            for i, x in enumerate(pieces):
+                if x == "Null":
+                    canvas.delete(lpieces[i])
         except Exception:
             pass
         square.clicked = False
         lclick.clicked = False
-        print(list(map(str, pieces)))
+        canvas.delete(clickID)
+
 
 def tocor(square):
     x = square[0]
@@ -54,6 +61,8 @@ root.title("Szachy")
 root.geometry("691x691")
 root.resizable(False, False)
 
+clicking = ["Null"]
+
 boardp = PhotoImage(file="img/board.png")
 wpawn = PhotoImage(file="img/wpawn.png")
 bpawn = PhotoImage(file="img/bpawn.png")
@@ -67,6 +76,7 @@ wqueen = PhotoImage(file="img/wqueen.png")
 bqueen = PhotoImage(file="img/bqueen.png")
 wking = PhotoImage(file="img/wking.png")
 bking = PhotoImage(file="img/bking.png")
+clicked = PhotoImage(file="img/clicked.png")
 
 canvas = Canvas(root, width=691, height=691, bg='white')
 canvas.pack(anchor="center", expand=True)
@@ -103,6 +113,7 @@ lpieces.append(canvas.create_image(tocor("C8"),image=bbishop,anchor = 'nw'))
 lpieces.append(canvas.create_image(tocor("F8"),image=bbishop,anchor = 'nw'))
 lpieces.append(canvas.create_image(tocor("D8"),image=bqueen,anchor = 'nw'))
 lpieces.append(canvas.create_image(tocor("E8"),image=bking,anchor = 'nw'))
+
 opieces = dict()
 for i, x in enumerate(pieces):
     opieces[x] = lpieces[i]
