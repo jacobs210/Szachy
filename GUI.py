@@ -1,9 +1,12 @@
 from tkinter import *
 from  board_setup import board, sboard
 from  piece_setup import pieces
+from func import checking, ppieces
 
 def tmove(square):
-    global clickID
+    global clickID, lmove, var
+    var = IntVar()
+
     lclick = ""
     for x in board:
         if x.clicked and x != square:
@@ -15,22 +18,41 @@ def tmove(square):
         square.clicked = True
         clickID = canvas.create_image(tocor(str(square)), image=clicked, anchor='nw')
     else:
-        try:
-            piece = lclick.occupant
+        piece = lclick.occupant
+        king = pieces[15] if piece.color == "White" else pieces[31]
+        nColor = "Black" if king.color == "White" else "White"
+        psquare = piece.square
+        if lmove != piece.color:
             x, y = tocor(str(square))
-            what, rook = lclick.occupant.to(square)
+            what, rook = piece.to(square)
+            if nColor in king.square.checked:
+                piece.tp(psquare)
+                raise Exception
             canvas.moveto(opieces.get(piece), x, y)
             if what == "Castling":
                 x, y = tocor(str(rook.square))
                 canvas.moveto(opieces.get(rook), x, y)
+            elif what == "Promotion":
+                global popup
+                popup = Canvas(root, width=500, height=100, bg='#FDFDFD')
+                popup.place(x = 345, y = 345, anchor="center")
+                popup.bind('<Button-2>', pressed2)
+                popup.lift("raise")
+                print("a")
+                print("b")
+
+
             for i, x in enumerate(pieces):
                 if x == "Null":
                     canvas.delete(lpieces[i])
-        except Exception:
-            pass
+            lmove = piece.color
         square.clicked = False
         lclick.clicked = False
         canvas.delete(clickID)
+        ppieces(board[sboard.index("A4")])
+def pressed2(event):
+    print('Button-2 pressed at x = % d, y = % d'%(event.x, event.y))
+
 
 def tocor(square):
     x = square[0]
@@ -45,7 +67,12 @@ def tocor(square):
     y += 32
     return x, y
 
-
+def getpiece(eventorigin):
+    xc = eventorigin.x
+    yc = eventorigin.y
+    xc //= 5
+    print(xc)
+    popup.destroy()
 def getsquare(eventorigin):
     xc = eventorigin.x
     yc = eventorigin.y
@@ -57,13 +84,17 @@ def getsquare(eventorigin):
         xc //= 79
         yc //= 79
         square = board[sboard.index(xlist[xc] + ylist[yc])]
+        checking()
         tmove(square)
 root = Tk()
 root.title("Szachy")
 root.geometry("691x691")
 root.resizable(False, False)
 
+lmove = "Black"
+
 clicking = ["Null"]
+checked = list()
 
 boardp = PhotoImage(file="img/board.png")
 wpawn = PhotoImage(file="img/wpawn.png")
@@ -79,7 +110,6 @@ bqueen = PhotoImage(file="img/bqueen.png")
 wking = PhotoImage(file="img/wking.png")
 bking = PhotoImage(file="img/bking.png")
 clicked = PhotoImage(file="img/clicked.png")
-
 canvas = Canvas(root, width=691, height=691, bg='white')
 canvas.pack(anchor="center", expand=True)
 canvas.create_image((0, 0),
@@ -121,4 +151,3 @@ for i, x in enumerate(pieces):
     opieces[x] = lpieces[i]
 canvas.bind("<Button 1>", getsquare)
 
-root.mainloop()

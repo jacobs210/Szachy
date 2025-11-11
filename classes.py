@@ -47,6 +47,7 @@ class Piece:
         checking()
         square = board[board.index(square)]
         cast = dict()
+        last_rank = 8 if self.color == "White" else 1
         if self.typ == "King":
             moves, cast = move(self)
         else:
@@ -57,7 +58,11 @@ class Piece:
             self.square.occupant = "Null"
             self.square = square
             self.Moved = True
-            return "Moving", None
+            checking()
+            if self.typ == "Pawn" and self.square.y == last_rank:
+                return "Promotion", None
+            else:
+                return "Moving", None
         elif square.occupant != "Null" and square.occupant.color != self.color and square in capture(self):
             pieces[pieces.index(square.occupant)] = "Null"
             square.occupant.square = "Null"
@@ -65,7 +70,11 @@ class Piece:
             square.occupant = self
             self.square = square
             self.Moved = True
-            return "Capturing", None
+            checking()
+            if self.typ == "Pawn" and self.square.y == last_rank:
+                return "Promotion", None
+            else:
+                return "Capturing", None
         elif square in cast.keys():
             rook = cast[square]
             square.occupant = self
@@ -82,7 +91,15 @@ class Piece:
             else:
                 rook.square = board[sboard.index(square.left())]
             rook.Moved = True
+            checking()
             return "Castling", rook
 
         else:
             raise Exception
+    def tp(self, square):
+        from func import checking
+        square.occupant = self
+        self.square.occupant = "Null"
+        self.square = square
+        self.Moved = True
+        checking()

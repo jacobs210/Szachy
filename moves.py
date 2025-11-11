@@ -145,18 +145,21 @@ def king(piece):
         cast[board[sboard.index(square.right(2))]] = pieces[y]
     return moves, cast
 def move(piece):
-    match piece.typ:
-        case "Pawn":
-            return pawn(piece)
-        case "Bishop":
-            return bishop(piece)
-        case "Knight":
-            return knight(piece)
-        case "Rook":
-            return rook(piece)
-        case "Queen":
-            return queen(piece)
-        case "King":
-            return king(piece)
-        case _:
-            raise Exception
+    try:
+        match piece.typ:
+            case "Pawn":
+                return pawn(piece)
+            case "Bishop":
+                return bishop(piece)
+            case "Knight":
+                return knight(piece)
+            case "Rook":
+                return rook(piece)
+            case "Queen":
+                return queen(piece)
+            case "King":
+                return king(piece)
+            case _:
+                raise Exception
+    except AttributeError:
+        return []

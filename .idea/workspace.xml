@@ -7,8 +7,9 @@
     <list default="true" id="177f6dc7-7e6a-46ed-941f-4664ceef035c" name="Changes" comment="Szachy">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/GUI.py" beforeDir="false" afterPath="$PROJECT_DIR$/GUI.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/captures.py" beforeDir="false" afterPath="$PROJECT_DIR$/captures.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/classes.py" beforeDir="false" afterPath="$PROJECT_DIR$/classes.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/func.py" beforeDir="false" afterPath="$PROJECT_DIR$/func.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/moves.py" beforeDir="false" afterPath="$PROJECT_DIR$/moves.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -64,7 +65,8 @@
     "ModuleVcsDetector.initialDetectionPerformed": "true",
     "Python.GUI.executor": "Run",
     "Python.captures.executor": "Run",
-    "Python.classes.executor": "Debug",
+    "Python.classes.executor": "Run",
+    "Python.func.executor": "Run",
     "Python.main.executor": "Run",
     "Python.moves.executor": "Run",
     "Python.piece_setup.executor": "Run",
@@ -178,7 +180,15 @@
       <option name="project" value="LOCAL" />
       <updated>1762803848933</updated>
     </task>
-    <option name="localTasksCounter" value="11" />
+    <task id="LOCAL-00011" summary="Szachy">
+      <option name="closed" value="true" />
+      <created>1762811803309</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1762811803309</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
