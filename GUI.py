@@ -5,7 +5,7 @@ from func import checking, ppieces
 
 def tmove(square):
     global clickID, lmove, var
-    var = IntVar()
+    var = IntVar(value=0)
 
     lclick = ""
     for x in board:
@@ -18,34 +18,37 @@ def tmove(square):
         square.clicked = True
         clickID = canvas.create_image(tocor(str(square)), image=clicked, anchor='nw')
     else:
-        piece = lclick.occupant
-        king = pieces[15] if piece.color == "White" else pieces[31]
-        nColor = "Black" if king.color == "White" else "White"
-        psquare = piece.square
-        if lmove != piece.color:
-            x, y = tocor(str(square))
-            what, rook = piece.to(square)
-            if nColor in king.square.checked:
-                piece.tp(psquare)
-                raise Exception
-            canvas.moveto(opieces.get(piece), x, y)
-            if what == "Castling":
-                x, y = tocor(str(rook.square))
-                canvas.moveto(opieces.get(rook), x, y)
-            elif what == "Promotion":
-                global popup
-                popup = Canvas(root, width=500, height=100, bg='#FDFDFD')
-                popup.place(x = 345, y = 345, anchor="center")
-                popup.bind('<Button-2>', pressed2)
-                popup.lift("raise")
-                print("a")
-                print("b")
-
-
-            for i, x in enumerate(pieces):
-                if x == "Null":
-                    canvas.delete(lpieces[i])
-            lmove = piece.color
+        try:
+            piece = lclick.occupant
+            king = pieces[15] if piece.color == "White" else pieces[31]
+            nColor = "Black" if king.color == "White" else "White"
+            psquare = piece.square
+            if lmove != piece.color:
+                x, y = tocor(str(square))
+                what, rook = piece.to(square)
+                if nColor in king.square.checked:
+                    piece.tp(psquare)
+                    raise Exception
+                canvas.moveto(opieces.get(piece), x, y)
+                if what == "Castling":
+                    x, y = tocor(str(rook.square))
+                    canvas.moveto(opieces.get(rook), x, y)
+                elif what == "Promotion":
+                    global popup
+                    popup = Canvas(root, width=500, height=100, bg='#FDFDFD')
+                    popup.place(x = 345, y = 345, anchor="center")
+                    bt1 = Button(height= 100, width=100, image=wqueen, command=queenend)
+                    bt1.place(x = 100, y = 100, anchor='center')
+                    var.set(1)
+                    popup.wait_variable(var)
+                    popup.destroy()
+                    var.set(0)
+                for i, x in enumerate(pieces):
+                    if x == "Null":
+                        canvas.delete(lpieces[i])
+                lmove = piece.color
+        except:
+            pass
         square.clicked = False
         lclick.clicked = False
         canvas.delete(clickID)
@@ -66,6 +69,8 @@ def tocor(square):
     x += 32
     y += 32
     return x, y
+def queenend():
+    var.set(2)
 
 def getpiece(eventorigin):
     xc = eventorigin.x
@@ -74,18 +79,19 @@ def getpiece(eventorigin):
     print(xc)
     popup.destroy()
 def getsquare(eventorigin):
-    xc = eventorigin.x
-    yc = eventorigin.y
-    xlist = ["A", "B", "C", "D", "E", "F", "G", "H"]
-    ylist = ["8", "7", "6", "5", "4", "3", "2", "1"]
-    if 661 > xc  > 30 and 661 > yc > 30:
-        xc -= 30
-        yc -= 30
-        xc //= 79
-        yc //= 79
-        square = board[sboard.index(xlist[xc] + ylist[yc])]
-        checking()
-        tmove(square)
+    if var.get() == 0:
+        xc = eventorigin.x
+        yc = eventorigin.y
+        xlist = ["A", "B", "C", "D", "E", "F", "G", "H"]
+        ylist = ["8", "7", "6", "5", "4", "3", "2", "1"]
+        if 661 > xc  > 30 and 661 > yc > 30:
+            xc -= 30
+            yc -= 30
+            xc //= 79
+            yc //= 79
+            square = board[sboard.index(xlist[xc] + ylist[yc])]
+            checking()
+            tmove(square)
 root = Tk()
 root.title("Szachy")
 root.geometry("691x691")
@@ -93,6 +99,7 @@ root.resizable(False, False)
 
 lmove = "Black"
 
+var = IntVar(value=0)
 clicking = ["Null"]
 checked = list()
 
