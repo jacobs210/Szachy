@@ -144,7 +144,7 @@ def king(piece):
     if not pieces[y].Moved and not piece.Moved and nColor not in board[sboard.index(square.right())].checked and nColor not in board[sboard.index(square.right(2))].checked and nColor not in board[board.index(square)].checked and board[sboard.index(square.right())].occupant == "Null" and board[sboard.index(square.right(2))].occupant == "Null":
         cast[board[sboard.index(square.right(2))]] = pieces[y]
     return moves, cast
-def move(piece):
+def move(piece, list_only = False):
     try:
         match piece.typ:
             case "Pawn":
@@ -158,7 +158,7 @@ def move(piece):
             case "Queen":
                 return queen(piece)
             case "King":
-                return king(piece)
+                return king(piece) if not list_only else king(piece)[0] + list(king(piece)[1].keys())
             case _:
                 raise Exception
     except AttributeError:

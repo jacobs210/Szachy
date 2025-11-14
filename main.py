@@ -1,4 +1,4 @@
-from GUI import root, var
+from GUI import root
 root.mainloop()
 
 
