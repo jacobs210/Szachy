@@ -67,6 +67,7 @@ class Piece:
             pieces[pieces.index(square.occupant)] = "Null"
             square.occupant.square = "Null"
             self.square.occupant = "Null"
+            del square.occupant
             square.occupant = self
             self.square = square
             self.Moved = True

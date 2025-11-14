@@ -1,7 +1,8 @@
 from tkinter import *
-from  board_setup import board, sboard
-from  piece_setup import pieces
-from func import checking, ppieces
+from board_setup import board, sboard
+from piece_setup import pieces, whites, blacks
+from func import checking, ppieces, sqr
+from classes import Piece
 
 def tmove(square):
     global clickID, lmove, var
@@ -20,6 +21,7 @@ def tmove(square):
     else:
         try:
             piece = lclick.occupant
+            color = piece.color
             king = pieces[15] if piece.color == "White" else pieces[31]
             nColor = "Black" if king.color == "White" else "White"
             psquare = piece.square
@@ -34,27 +36,53 @@ def tmove(square):
                     x, y = tocor(str(rook.square))
                     canvas.moveto(opieces.get(rook), x, y)
                 elif what == "Promotion":
+                    canvas.delete(clickID)
                     global popup
-                    popup = Canvas(root, width=500, height=100, bg='#FDFDFD')
+                    popup = Canvas(root, width=400, height=100, bg='#FDFDFD')
                     popup.place(x = 345, y = 345, anchor="center")
-                    bt1 = Button(height= 100, width=100, image=wqueen, command=queenend)
-                    bt1.place(x = 100, y = 100, anchor='center')
+                    position = piece.square
+                    if color == "White":
+                        queen = wqueen
+                        rook = wrook
+                        bishop = wbishop
+                        knight = wknight
+                    else:
+                        queen = bqueen
+                        rook = brook
+                        bishop = bbishop
+                        knight = bknight
+
+                    bt1 = Button(height=100, width=100, image=queen, command=lambda c=color,w="Queen": promotion(c,w, position, queen),bg='#FDFDFD')
+                    bt2 = Button(height=100, width=100, image=rook, command=lambda c=color,w="Rook": promotion(c,w,position, rook ),bg='#FDFDFD')
+                    bt3 = Button(height=100, width=100, image=bishop, command=lambda c=color,w="Bishop": promotion(c,w,position, bishop),bg='#FDFDFD')
+                    bt4 = Button(height=100, width=100, image=knight, command=lambda c=color,w="Knight": promotion(c,w,position, knight),bg='#FDFDFD')
+                    bt1.place(x=195, y=345, anchor='center')
+                    bt2.place(x=295, y=345, anchor='center')
+                    bt3.place(x=395, y=345, anchor='center')
+                    bt4.place(x=495, y=345, anchor='center')
+                    bt1.lift()
+                    bt2.lift()
+                    bt3.lift()
+                    bt4.lift()
                     var.set(1)
                     popup.wait_variable(var)
                     popup.destroy()
+                    bt1.destroy()
+                    bt2.destroy()
+                    bt3.destroy()
+                    bt4.destroy()
+                    pieces[pieces.index(piece)] = "Null"
+                    del piece
                     var.set(0)
                 for i, x in enumerate(pieces):
                     if x == "Null":
                         canvas.delete(lpieces[i])
-                lmove = piece.color
+            lmove = color
         except:
             pass
         square.clicked = False
         lclick.clicked = False
         canvas.delete(clickID)
-        ppieces(board[sboard.index("A4")])
-def pressed2(event):
-    print('Button-2 pressed at x = % d, y = % d'%(event.x, event.y))
 
 
 def tocor(square):
@@ -69,7 +97,16 @@ def tocor(square):
     x += 32
     y += 32
     return x, y
-def queenend():
+def promotion(color, piece_type, position, image):
+    piece = Piece(color, piece_type, position)
+    if color == "White":
+        whites.append(piece)
+        pieces.append(whites[-1])
+    else:
+        blacks.append(piece)
+        pieces.append(blacks[-1])
+    lpieces.append(canvas.create_image(tocor(str(position)),image=image,anchor = 'nw'))
+    opieces[pieces[-1]] = lpieces[-1]
     var.set(2)
 
 def getpiece(eventorigin):
@@ -91,6 +128,8 @@ def getsquare(eventorigin):
             yc //= 79
             square = board[sboard.index(xlist[xc] + ylist[yc])]
             checking()
+            for x in board:
+                print(x, list(map(str,list(map(str,x.checked)))))
             tmove(square)
 root = Tk()
 root.title("Szachy")
